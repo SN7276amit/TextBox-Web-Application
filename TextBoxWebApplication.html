@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+     <style type="text/css">
+         #data-form
+         {
+            font-weight: bolder;
+
+         }
+     </style>
+    <title>Input and Table Example</title>
+</head>
+<body>
+    <h1 align="center">Input and Table Example</h1>
+    <div align="center">
+
+    <!-- Form to input data -->
+    <form id="data-form">
+        <label for="name">Name:</label>
+        <input type="text" id="name" required><br><br>
+
+        <label for="age">Age:</label>
+        <input type="number" id="age" required ><br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" required><br><br>
+
+        <label for="city">City:</label>
+        <input type="text" id="city" required><br><br>
+
+        <input type="submit" value="Add Data">
+    </form>
+    
+
+    <!-- Table to display data -->
+    <table id="data-table" border="1">
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Email</th>
+            <th>City</th>
+            <th>Action</th> <!-- Add a column for Edit and Delete buttons -->
+        </tr>
+    </table>
+    </div>
+
+    <script>
+        var editMode = false;
+        var rowIndexToEdit;
+
+        // Function to handle form submission
+        document.getElementById("data-form").addEventListener("submit", function (e) {
+            e.preventDefault(); // Prevent the form from submitting and refreshing the page
+            
+            // Get input values
+            var name = document.getElementById("name").value;
+            var age = document.getElementById("age").value;
+            var email = document.getElementById("email").value;
+            var city = document.getElementById("city").value;
+
+            // Check if we're in edit mode
+            if (editMode) {
+                // Update the row with the edited data
+                var table = document.getElementById("data-table");
+                var row = table.rows[rowIndexToEdit];
+                row.cells[0].innerHTML = name;
+                row.cells[1].innerHTML = age;
+                row.cells[2].innerHTML = email;
+                row.cells[3].innerHTML = city;
+
+                // Reset form and edit mode
+                editMode = false;
+                rowIndexToEdit = undefined;
+                document.getElementById("data-form").reset();
+            } else {
+                // Create a new table row and populate it with the input values
+                var table = document.getElementById("data-table");
+                var newRow = table.insertRow(table.rows.length);
+                var cell1 = newRow.insertCell(0);
+                var cell2 = newRow.insertCell(1);
+                var cell3 = newRow.insertCell(2);
+                var cell4 = newRow.insertCell(3);
+                var cell5 = newRow.insertCell(4); // Add a new cell for Edit and Delete buttons
+                cell1.innerHTML = name;
+                cell2.innerHTML = age;
+                cell3.innerHTML = email;
+                cell4.innerHTML = city;
+                cell5.innerHTML = '<button onclick="editRow(this)">Edit</button> <button onclick="deleteRow(this)">Delete</button>'; // Create Edit and Delete buttons
+            }
+
+            // Clear the input fields
+            document.getElementById("name").value = "";
+            document.getElementById("age").value = "";
+            document.getElementById("email").value = "";
+            document.getElementById("city").value = "";
+        });
+
+        // Function to edit a row
+        function editRow(button) {
+            var row = button.parentNode.parentNode; // Get the row to edit
+            rowIndexToEdit = row.rowIndex;
+            editMode = true;
+
+            // Populate the form with the row's data
+            document.getElementById("name").value = row.cells[0].innerHTML;
+            document.getElementById("age").value = row.cells[1].innerHTML;
+            document.getElementById("email").value = row.cells[2].innerHTML;
+            document.getElementById("city").value = row.cells[3].innerHTML;
+        }
+
+        // Function to delete a row
+        function deleteRow(button) {
+            var row = button.parentNode.parentNode; // Get the row to delete
+            row.parentNode.removeChild(row); // Remove the row from the table
+        }
+    </script>
+</body>
+</html>
